@@ -1,0 +1,16 @@
+.idea
+.env
+**/.env*
+**/env
+
+node_modules
+.DS_Store
+npm-debug.log
+/temp
+build
+
+.vscode
+**/node_modules
+**.log
+**/**.log
+coverage
