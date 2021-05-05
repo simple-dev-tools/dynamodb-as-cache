@@ -43,6 +43,7 @@ class DCacheClient {
    * @param {*} key 
    * @param {*} value 
    * @param {*} ttl 
+   * @param {*} skey
    * @returns 
    */
   set(pkey, value, ttl, skey = 'CACHE') {
