@@ -1,1 +1,1 @@
-module.exports = require('./src/DCacheClient');
+module.exports = require('./src/DCacheClient')

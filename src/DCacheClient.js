@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+const AWS = require('aws-sdk')
 
 /**
  * DyanmoDB as Cache Client
@@ -16,27 +16,27 @@ class DCacheClient {
     consistentRead,
     defaultSortKeyValue
   }) {
-    this.region = region;
-    this.tableName = tableName;
-    this.accessKeyId = accessKeyId;
-    this.secretAccessKey = secretAccessKey;
-    this.partionKey = partionKey || 'pkey';
-    this.sortKey = sortKey || 'skey';
-    this.ttlAttribute = ttlAttribute || 'ttl';
-    this.consistentRead = consistentRead || false;
-    this.defaultSortKeyValue = defaultSortKeyValue || 'DCache';
+    this.region = region
+    this.tableName = tableName
+    this.accessKeyId = accessKeyId
+    this.secretAccessKey = secretAccessKey
+    this.partionKey = partionKey || 'pkey'
+    this.sortKey = sortKey || 'skey'
+    this.ttlAttribute = ttlAttribute || 'ttl'
+    this.consistentRead = consistentRead || false
+    this.defaultSortKeyValue = defaultSortKeyValue || 'DCache'
 
-    let credentials = {};
+    let credentials = {}
     if (this.accessKeyId && this.secretAccessKey) {
       credentials = {
         accessKeyId: this.awsAccessKey,
         secretAccessKey: this.awsSecretKey
-      };
+      }
     }
     this.ddb = new AWS.DynamoDB({
       region: this.region,
       ...credentials
-    });
+    })
 
   }
 
@@ -60,7 +60,7 @@ class DCacheClient {
       cached_value: {
         S: JSON.stringify(value)
       }
-    };
+    }
 
     if (ttl != null) {
       item[this.ttlAttribute] = {
@@ -73,7 +73,7 @@ class DCacheClient {
         ...item
       },
       TableName: this.tableName
-    }).promise();
+    }).promise()
   }
 
   /**
@@ -93,17 +93,17 @@ class DCacheClient {
           S: skey || this.defaultSortKeyValue
         }
       }
-    }).promise();
+    }).promise()
 
     if (data && data.Item) {
-      const value = data.Item.cached_value.S;
+      const value = data.Item.cached_value.S
       if (data.Item.ttl && Date.now() / 1000 > data.Item.ttl.N) {
-        return null;
+        return null
       }
-      return value;
+      return value
     }
-    return null;
-  };
+    return null
+  }
 }
 
 module.exports = {
