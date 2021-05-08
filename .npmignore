@@ -2,3 +2,7 @@ node_modules
 __tests__
 examples
 coverage
+.env
+.eslintignore
+.eslintrc.json
+jsonfig.json
