@@ -10,15 +10,15 @@ async function main() {
       tableName: process.env.TABLE_NAME
     });
 
-    await client.set('key123', 'hello world', 2, skey = '123');
-    await sleep(1000);
-    const v = await client.get('key123', skey = '123');
+    await client.set('foo', 'hello world', 1, skey = '123');
+    await client.set('bar', 'hello world', 10, skey = '123');
+    await sleep(3000);
+    const v1 = await client.get('foo', skey = '123');
+    const v2 = await client.get('bar', skey = '123');
 
-    if (v) {
-      console.log('cache hit: ', v);
-    } else {
-      console.log('cache miss');
-    }
+    v1? console.log('v1: cache hit =>', v1) : console.log('v1: cache miss');
+    v2? console.log('v2: cache hit =>', v2) : console.log('v2: cache miss');
+
   } catch (e) {
     console.error('something went wrong', e);
   }

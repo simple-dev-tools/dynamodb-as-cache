@@ -21,7 +21,7 @@ describe('#set', () => {
     mockedDynamoDB.mockRestore();
   });
 
-  it('should successfully set value', async () => {
+  it('should set value', async () => {
     mockedPutItem.mockReturnValue({
       promise: jest.fn().mockResolvedValue({})
     });
@@ -39,7 +39,7 @@ describe('#set', () => {
           pkey: {S: 'key1' },
           ttl: { N: '1593083518' },
           cached_value: { S: '123' },
-          skey: { S: 'CACHE'}
+          skey: { S: 'DCache'}
         },
         TableName: 'table123'
       }]);

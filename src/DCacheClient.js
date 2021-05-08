@@ -4,6 +4,7 @@ const AWS = require('aws-sdk');
  * DyanmoDB as Cache Client
  */
 class DCacheClient {
+
   constructor({
     region, // required
     tableName, // required
@@ -12,30 +13,31 @@ class DCacheClient {
     partionKey,
     sortKey,
     ttlAttribute,
-    consistentRead
+    consistentRead,
+    defaultSortKeyValue
   }) {
     this.region = region;
+    this.tableName = tableName;
     this.accessKeyId = accessKeyId;
     this.secretAccessKey = secretAccessKey;
-    this.tableName = tableName;
     this.partionKey = partionKey || 'pkey';
     this.sortKey = sortKey || 'skey';
     this.ttlAttribute = ttlAttribute || 'ttl';
     this.consistentRead = consistentRead || false;
+    this.defaultSortKeyValue = defaultSortKeyValue || 'DCache';
 
-    if (!this.ddb) {
-      let credentials = {};
-      if (this.accessKeyId && this.secretAccessKey) {
-        credentials = {
-          accessKeyId: this.awsAccessKey,
-          secretAccessKey: this.awsSecretKey
-        };
-      }
-      this.ddb = new AWS.DynamoDB({
-        region: this.region,
-        ...credentials
-      });
+    let credentials = {};
+    if (this.accessKeyId && this.secretAccessKey) {
+      credentials = {
+        accessKeyId: this.awsAccessKey,
+        secretAccessKey: this.awsSecretKey
+      };
     }
+    this.ddb = new AWS.DynamoDB({
+      region: this.region,
+      ...credentials
+    });
+
   }
 
   /**
@@ -46,14 +48,14 @@ class DCacheClient {
    * @param {*} skey
    * @returns 
    */
-  set(pkey, value, ttl, skey = 'CACHE') {
+  set(pkey, value, ttl, skey) {
 
     const item = {
       [this.partionKey]: {
         S: pkey
       },
       [this.sortKey]: {
-        S: skey
+        S: skey || this.defaultSortKeyValue
       },
       cached_value: {
         S: JSON.stringify(value)
@@ -79,7 +81,7 @@ class DCacheClient {
    * @param {*} key 
    * @returns 
    */
-  async get(pkey, skey = 'CACHE') {
+  async get(pkey, skey) {
     const data = await this.ddb.getItem({
       TableName: this.tableName,
       ConsistentRead: this.consistentRead,
@@ -88,7 +90,7 @@ class DCacheClient {
           S: pkey
         },
         [this.sortKey]: {
-          S: skey
+          S: skey || this.defaultSortKeyValue
         }
       }
     }).promise();

@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "test": "./node_modules/jest/bin/jest.js --coverage --collectCoverageFrom=src/**/*.js --detectOpenHandles --forceExit",
-    "run_example1": "node -r dotenv/config examples/set_and_get.js"
+    "example1": "node -r dotenv/config examples/set_and_get.js"
   },
   "author": "Matt Shen",
   "license": "MIT",
