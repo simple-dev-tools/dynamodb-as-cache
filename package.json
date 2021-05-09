@@ -8,6 +8,11 @@
     "Cache",
     "Redis"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simple-dev-tools/dynamodb-as-cache.git"
+  },
+  "homepage": "https://github.com/simple-dev-tools/dynamodb-as-cache#readme",
   "scripts": {
     "test": "./node_modules/jest/bin/jest.js --coverage --collectCoverageFrom=src/**/*.js --detectOpenHandles --forceExit",
     "lint": "eslint .",
