@@ -18,7 +18,7 @@ npm i dynamodb-as-cache
 ## Example
 
 ```js
-const { DCacheClient } = require('dynamodb-as-cache')
+const { DCacheClient } = require('../index')
 const { promisify } = require('util')
 
 const sleep = promisify(setTimeout)
@@ -30,14 +30,21 @@ async function main() {
       tableName: process.env.TABLE_NAME
     })
 
-    await client.set('foo', 'hello world', 1, skey = '123')
-    await client.set('bar', 'hello world', 10, skey = '123')
+    await client.set('foo', { message: 'hello foo' }, 1)
+    await client.set('bar', { message: 'hello bar' }, 10)
     await sleep(3000)
-    const v1 = await client.get('foo', skey = '123')
-    const v2 = await client.get('bar', skey = '123')
+    const v1 = await client.get('foo')
+    const v2 = await client.get('bar')
 
     v1? console.log('v1: cache hit =>', v1) : console.log('v1: cache miss')
     v2? console.log('v2: cache hit =>', v2) : console.log('v2: cache miss')
+
+    const _v3 = await client.getset('foo', { message: 'hello foo again' }, 1)
+    const _v4 = await client.getset('bar', { message: 'hello bar again' }, 10)
+    const v3 = await client.get('foo')
+    const v4 = await client.get('bar')
+    console.log(`v3: old = ${_v3}  new= ${v3}`)    
+    console.log(`v4: old = ${_v4}  new= ${v4}`)    
 
   } catch (e) {
     console.error('something went wrong', e)
@@ -63,7 +70,7 @@ main().catch(console.error)
 * `consistentRead` - _boolean_, optional. (default: `false`)
 * `defaultSortKeyValue` - _string_, optional. (default: `DCache`)
 
-### set(pkey, value, ttl = null, skey = 'DCache')
+### set(pkey, value, ttl = null, options)
 
 Returns Promise, which 
 * __resovled__ with empty object
@@ -73,9 +80,21 @@ Arguments:
 * `pkey` partition key
 * `value` value to cache
 * `ttl` time to live (in seconds), `default: null`
-* `skey` sort key. `default: DCache`
+* `options` options, `default: {}`
 
-### get(pkey, skey = 'DCache')
+### getset(pkey, value, ttl = null, options)
+
+Returns Promise, which 
+* __resovled__ with old cached value
+* __rejected__ when dynamodb throws error
+
+Arguments: 
+* `pkey` partition key
+* `value` value to cache
+* `ttl` time to live (in seconds), `default: null`
+* `options` options, `default: {}`
+
+### get(pkey, options)
 
 Returns Promise, which 
 * __resovled__ with cached value
@@ -83,4 +102,4 @@ Returns Promise, which
 
 Arguments: 
 * `pkey` partition key
-* `skey` sort key, `default: DCache`
+* `options` options, `default: {}`

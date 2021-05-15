@@ -1,6 +1,6 @@
 {
   "name": "dynamodb-as-cache",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use dynamodb as cache service, providing Redis-like APIs",
   "main": "index.js",
   "keywords": [

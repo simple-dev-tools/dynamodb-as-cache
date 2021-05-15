@@ -6,3 +6,4 @@ coverage
 .eslintignore
 .eslintrc.json
 jsonfig.json
+.npmrc

@@ -45,17 +45,16 @@ class DCacheClient {
    * @param {*} key 
    * @param {*} value 
    * @param {*} ttl 
-   * @param {*} skey
+   * @param {*} options
    * @returns 
    */
-  set(pkey, value, ttl, skey) {
-
+  set(pkey, value, ttl, options = {}) {
     const item = {
       [this.partionKey]: {
         S: pkey
       },
       [this.sortKey]: {
-        S: skey || this.defaultSortKeyValue
+        S: options.skey || this.defaultSortKeyValue
       },
       cached_value: {
         S: JSON.stringify(value)
@@ -72,16 +71,42 @@ class DCacheClient {
       Item: {
         ...item
       },
-      TableName: this.tableName
+      TableName: this.tableName,
+      ReturnValues: options.returnOldValue? 'ALL_OLD': 'NONE'
     }).promise()
+  }
+
+  /**
+   * Set Value, and return old values.
+   * @param {*} key 
+   * @param {*} value 
+   * @param {*} ttl 
+   * @param {*} options
+   * @returns 
+   */
+  async getset(pkey, value, ttl, options = {}) {
+    const data = await this.set(pkey, value, ttl, {
+      ...options,
+      returnOldValue: true
+    })
+
+    if (data && data.Attributes) {
+      const value = data.Attributes.cached_value.S
+      if (data.Attributes.ttl && Date.now() / 1000 > data.Attributes.ttl.N) {
+        return null
+      }
+      return value
+    }
+    return null
   }
 
   /**
    * Get Value
    * @param {*} key 
+   * @param {*} options
    * @returns 
    */
-  async get(pkey, skey) {
+  async get(pkey, opitons = {}) {
     const data = await this.ddb.getItem({
       TableName: this.tableName,
       ConsistentRead: this.consistentRead,
@@ -90,7 +115,7 @@ class DCacheClient {
           S: pkey
         },
         [this.sortKey]: {
-          S: skey || this.defaultSortKeyValue
+          S: opitons.skey || this.defaultSortKeyValue
         }
       }
     }).promise()
