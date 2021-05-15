@@ -1,3 +1,5 @@
+[![NPM](https://nodei.co/npm/dynamodb-as-cache.png)](https://github.com/simple-dev-tools/dynamodb-as-cache)
+
 # DynamoDB as Cache
 
 Use DynamoDB as cache service, providing Redis-like APIs and reducing the boilerplate of dealing low-level DynamoDB APIs. 
