@@ -1,4 +1,4 @@
-[![NPM](https://nodei.co/npm/dynamodb-as-cache.png)](https://github.com/simple-dev-tools/dynamodb-as-cache)
+[![NPM](https://nodei.co/npm/dynamodb-as-cache.png)](https://www.npmjs.com/package/dynamodb-as-cache)
 
 # DynamoDB as Cache
 
