@@ -28,3 +28,9 @@ jobs:
     - run: npm i
     - run: npm test
     - run: npm run lint
+
+    - uses: chrnorm/deployment-action@releases/v1
+      name: Create GitHub deployment
+      id: deployment
+      with:
+        environment: prod
