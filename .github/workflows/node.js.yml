@@ -33,4 +33,6 @@ jobs:
       name: Create GitHub deployment
       id: deployment
       with:
+        token: "${{ github.token }}"
+        target_url: http://my-app-url.com
         environment: prod
