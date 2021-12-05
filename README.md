@@ -6,7 +6,7 @@ Use DynamoDB as cache service, providing Redis-like APIs and reducing the boiler
 
 ## Why
 
-DynamoDB requires minimum maintenance overhead and acceptable performance in quite many cases. Often we just need a simple centralized key-value storage for our distributed services. 
+DynamoDB requires minimum maintenance overhead and has acceptable performance in caching data. Often we just need a simple centralized key-value storage for our distributed services. 
 
 Where extreme performance is required, we can still easily migrate our code to use Redis. 
 
